@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/davidspector67/TaskMap/issues"
   },
-  "homepage": "https://github.com/davidspector67/TaskMap#readme"
+  "homepage": "https://github.com/davidspector67/TaskMap#readme",
+  "dependencies": {
+    "@nestjs/swagger": "^6.2.1"
+  }
 }
