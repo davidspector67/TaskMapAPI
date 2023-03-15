@@ -1,0 +1,19 @@
+{
+  "name": "taskmap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidspector67/TaskMap.git"
+  },
+  "author": "David Spector",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidspector67/TaskMap/issues"
+  },
+  "homepage": "https://github.com/davidspector67/TaskMap#readme"
+}
