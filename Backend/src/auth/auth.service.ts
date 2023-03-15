@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Login } from './login.model';
+import { Login } from './dtos/login.model';
 
 @Injectable()
 export class AuthService {
