@@ -9,14 +9,18 @@ import { validate } from 'class-validator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
+  @Post('signup')
   signUp(@Body() userInfo: Login): string {
-    const hi: Login = {username:"", password:"hi"};
     return this.authService.signUp(userInfo);
   }
 
-  @Get()
+  @Get('getUsers')
   getUsers(): any {
     return this.authService.getUsers()
+  }
+
+  @Post('login')
+  login(@Body() userInfo: Login): string {
+    return this.authService.login(userInfo);
   }
 }
