@@ -3,15 +3,24 @@ import { Project } from './dtos/project.model';
 
 @Injectable()
 export class ProjectsService {
-  private logins: Project[] = [];
+  private projects: Project[] = [];
 
-//   signUp(userInfo: Project) {
-//     this.logins.push(userInfo);
-//     return userInfo.username + " successfully signed up!";
-//   }
+  createNew(projectInfo: Project): string {
+    if (this.projects.filter(project => project.title === projectInfo.title).length > 0)
+        return "Project title already exists";
+    this.projects.push(projectInfo);
+    return projectInfo.title + " successfully created!";
+  }
 
-  getUsers(): Project[] {
-    return this.logins.slice();
+  getProjects(): Project[] {
+    return this.projects.slice();
+  }
+
+  getProjectDescription(title: string) : string {
+    const project = this.projects.find(project => project.title === title)
+    if (!project)
+        return "Project not found."
+    return project.description;
   }
 
 //   login(userInfo: Project): string {
