@@ -10,17 +10,17 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  signUp(@Body() userInfo: Login): string {
+  async signUp(@Body() userInfo: Login): Promise<Boolean> {
     return this.authService.signUp(userInfo);
   }
 
   @Get('getUsers')
-  getUsers(): any {
+  async getUsers(): Promise<String[]> {
     return this.authService.getUsers()
   }
 
   @Post('login')
-  login(@Body() userInfo: Login): string {
+  async login(@Body() userInfo: Login): Promise<Boolean> {
     return this.authService.login(userInfo);
   }
 }
