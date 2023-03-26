@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserData } from 'src/database/entities';
+import { User } from 'src/database/entities';
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { AuthService, expireSec } from './auth.service';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserData])],
+  imports: [PassportModule, TypeOrmModule.forFeature([User]), JwtModule.register({
+    secret: 'proflow_jwt_key',
+    signOptions: { expiresIn: expireSec },
+  })],
   controllers: [AuthController],
   providers: [AuthService],
 })

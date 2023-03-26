@@ -1,10 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, Generated, PrimaryGeneratedColumn } from 'typeorm';
 
 // entities correspond to tables
 @Entity("users")
-export class UserData {
+export class User {
   @PrimaryGeneratedColumn({ name: "ROWID" })
   readonly ROWID: number;
+
+  @Column({ type: "text" })
+	@Generated("uuid")
+	readonly guid: string;
 
   @Column({ type: "longtext" })
   readonly username: string;
@@ -14,9 +18,13 @@ export class UserData {
 }
 
 @Entity("projects")
-export class ProjectData {
+export class Project {
     @PrimaryGeneratedColumn({ name: "ROWID" })
     readonly ROWID: number;
+
+    @Column({ type: "text" })
+    @Generated("uuid")
+    readonly guid: string;
 
     @Column({ type: "longtext" })
     readonly title: string;
