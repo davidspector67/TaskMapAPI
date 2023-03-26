@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { ProjectData, UserData } from './database/entities';
+import { Project, User } from './database/entities';
 import { ProjectsModule } from './projects/projects.module';
-import { TestModule } from './test/test.module';
+// import { TestModule } from './test/test.module';
 
 
 @Module({
@@ -14,9 +14,10 @@ import { TestModule } from './test/test.module';
     username: 'root',
     password: 'password',
     database: 'taskmap',
-    entities: [UserData, ProjectData],
+    entities: [User, Project],
     synchronize: true,
-  }), TestModule,
+  }),
+  // }), TestModule,
 ],
 })
 export class AppModule {}

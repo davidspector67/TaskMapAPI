@@ -1,34 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotAcceptableException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserData } from 'src/database/entities';
+import { User } from 'src/database/entities';
 import { Repository } from 'typeorm';
-import { Login } from './dtos/login.model';
+import { LoginRequest, LoginResponse } from './dtos/request.entities';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+
+//TODO: put global variables, port numbers, etc into env.ts. Or maybe use module/namespace if that makes sense
+export const expireSec = 60;
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(UserData) private userRepository: Repository<UserData>,) {}
+  constructor(@InjectRepository(User) private userRepository: Repository<User>, private jwtService: JwtService) {}
 
-  async signUp(userInfo: Login): Promise<Boolean> {
+  async signUp(userInfo: LoginRequest): Promise<User> {
+    userInfo.username = userInfo.username.toLowerCase();
     if (await this.userRepository.findOne({ where: { username: userInfo.username } })) {
       console.log("Account with this username already exists! Try a different username.")
       return null;
     }
-    this.userRepository.save(userInfo);
+    const user = await this.userRepository.save(userInfo);
     console.log(userInfo.username + " successfully signed up!");
-    return true;
+    return user;
   }
 
-  async getUsers(): Promise<String[]> {
-    const users = await this.userRepository.find({select: {username: true}});
-    return users.map(user => user.username);
+  async login(user: User): Promise<string> {
+    const payload = { guid: user.guid };
+    return this.jwtService.sign(payload);
+}
+
+  async userAuth(user: User): Promise<LoginResponse> {
+    const jwt = await this.login(user);
+    return { jwt: jwt, guid: user.guid, expireSec: expireSec, }
   }
 
-  async login(userInfo: Login): Promise<Boolean> {
-    if (await this.userRepository.findOne({ where: { username: userInfo.username, password: userInfo.password } })) {
-      console.log(userInfo.username + " successfully logged in!")
-      return true;
+  async validateUser(userInfo: LoginRequest): Promise<User> {
+    userInfo.username = userInfo.username.toLowerCase();
+    const user = await this.userRepository.find({ where: { username: userInfo.username } });
+    if (!user) return null;
+    const passwordValid = await bcrypt.compare(userInfo.password, user[0].password)
+    if (!user) {
+        console.log('Could not find the user');
+        return null;
     }
-    console.log("Incorrect username or password!")
+    if (user && passwordValid ) {
+      if(user.length === 1)
+        return user[0];
+      throw new NotAcceptableException('Multiple users exist with same username!');
+    }
+    console.log('Incorrect password');
     return null;
-  }
+}
+
 }
