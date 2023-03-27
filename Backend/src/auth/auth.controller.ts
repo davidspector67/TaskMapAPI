@@ -1,11 +1,9 @@
-import { Controller, Post, Get, Body } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginRequest, LoginResponse } from './dtos/request.entities';
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { validate } from 'class-validator';
+import { ApiTags } from "@nestjs/swagger";
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/database/entities';
-import { JwtAuthGuard, AuthUser } from "./jwt.auth.guard";
 
 // TODO: make this global variable somewhere
 // In global variables file, also put ports and secret key there
@@ -28,13 +26,21 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() userInfo: LoginRequest): Promise<LoginResponse> {
+  async login(@Body() userInfo:  LoginRequest): Promise<any> {
     const user = await this.authService.validateUser(userInfo);
 
     if (!user)
       return null;
 
     return this.authService.userAuth(user);
-
   }
 }
+
+  // @UseGuards(JwtAuthGuard)
+	// @ApiBearerAuth()
+	// @Post("refresh")
+	// async auth_refresh(@AuthUser() user: User): Promise<LoginResponse> {
+	// 	const jwt = await this.authService.login(user);
+  //   console.log()
+	// 	return { jwt, guid: user.guid, expireSec };
+	// }

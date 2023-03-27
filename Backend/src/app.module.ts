@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { Project, User } from './database/entities';
 import { ProjectsModule } from './projects/projects.module';
-// import { TestModule } from './test/test.module';
 
 
 @Module({

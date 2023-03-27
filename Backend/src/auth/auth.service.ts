@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   async login(user: User): Promise<string> {
-    const payload = { guid: user.guid };
+    const payload = { sub: user.guid }; // sub -> consistency w JWT standards
     return this.jwtService.sign(payload);
 }
 
@@ -37,19 +37,24 @@ export class AuthService {
   async validateUser(userInfo: LoginRequest): Promise<User> {
     userInfo.username = userInfo.username.toLowerCase();
     const user = await this.userRepository.find({ where: { username: userInfo.username } });
-    if (!user) return null;
+    
+    if (user.length > 1)
+      throw new NotAcceptableException('Multiple users exist with same username!')
+    if (!user.length) {
+      console.log('User does not exist');
+      return null;
+    }
+    
     const passwordValid = await bcrypt.compare(userInfo.password, user[0].password)
-    if (!user) {
-        console.log('Could not find the user');
-        return null;
-    }
-    if (user && passwordValid ) {
-      if(user.length === 1)
-        return user[0];
-      throw new NotAcceptableException('Multiple users exist with same username!');
-    }
+    if (user && passwordValid ) 
+      return user[0];
     console.log('Incorrect password');
     return null;
 }
+
+  async findUserFromGuid(guid: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { guid: guid }})
+    return user;
+  }
 
 }
