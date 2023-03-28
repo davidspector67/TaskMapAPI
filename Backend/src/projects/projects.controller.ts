@@ -1,29 +1,39 @@
 import { Controller, Post, Get, Body, Param, ForbiddenException, UseGuards } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
-import { Project } from './dtos/project.model';
+import { ProjectProposal, ProjectTitleRequest } from './dtos/project.model';
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { IsNotEmpty, validate } from 'class-validator';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { AuthUser, JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Project, User } from '..//database/entities';
 
 @ApiTags('projects')
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
 @Controller('projects')
 export class ProjectsController {
-  constructor(private readonly projectService: ProjectsService) {}
+  constructor( private readonly projectService: ProjectsService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Post('create')
-  create(@Body() projectInfo: Project): string {
-    return this.projectService.createNew(projectInfo);
+  async create(@AuthUser() user: User, @Body() projectProposal: ProjectProposal): Promise<Project> {
+    return await this.projectService.createProject(projectProposal, user);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get('getprojects')
-  getProjects(): any {
-    return this.projectService.getProjects();
+  async getProjects(@AuthUser() user: User): Promise<Project[]> {
+    return await this.projectService.getProjects(user);
   }
 
-  @Get(':title')
-  getProjectDescription(@Param('title') title: string): string {
-    return this.projectService.getProjectDescription(title);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Post('delete')
+  async delete(@AuthUser() user: User, @Body() title: ProjectTitleRequest): Promise<boolean> {
+    return await this.projectService.deleteProject(title, user);
   }
+
+  // @Get(':title')
+  // getProjectDescription(@Param('title') title: string): string {
+  //   return this.projectService.getProjectDescription(title);
+  // }
 }

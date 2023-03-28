@@ -16,7 +16,6 @@ import { ProjectsModule } from './projects/projects.module';
     entities: [User, Project],
     synchronize: true,
   }),
-  // }), TestModule,
 ],
 })
 export class AppModule {}
