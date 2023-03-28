@@ -1,5 +1,5 @@
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "../../database/entities";
+import { User } from "../database/entities";
 
 export const TypeOrmTestingModule = (entities: any[]) => 
     TypeOrmModule.forRoot({
@@ -12,13 +12,3 @@ export const TypeOrmTestingModule = (entities: any[]) =>
         synchronize: true,
         port: 3306,
     });
-
-// imports: [AuthModule, ProjectsModule, TypeOrmModule.forRoot({
-//     type: 'mysql',
-//     host: 'localhost',
-//     port: 3306,
-//     username: 'root',
-//     password: 'password',
-//     database: 'taskmap',
-//     entities: [User, Project],
-//     synchronize: true,

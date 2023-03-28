@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginRequest, LoginResponse } from './dtos/request.entities';
 import { ApiTags } from "@nestjs/swagger";
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/database/entities';
+import { User } from '../database/entities';
 
 // TODO: make this global variable somewhere
 // In global variables file, also put ports and secret key there
@@ -26,9 +26,8 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() userInfo:  LoginRequest): Promise<any> {
+  async login(@Body() userInfo:  LoginRequest): Promise<LoginResponse> {
     const user = await this.authService.validateUser(userInfo);
-
     if (!user)
       return null;
 

@@ -1,13 +1,13 @@
 import { Injectable, NotAcceptableException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/database/entities';
+import { User } from '../database/entities';
 import { Repository } from 'typeorm';
 import { LoginRequest, LoginResponse } from './dtos/request.entities';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 //TODO: put global variables, port numbers, etc into env.ts. Or maybe use module/namespace if that makes sense
-export const expireSec = 60;
+export const expireSec = 60000;
 
 @Injectable()
 export class AuthService {
