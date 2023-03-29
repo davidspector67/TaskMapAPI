@@ -1,7 +1,7 @@
 import { JwtModule, JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User, Project } from "../database/entities";
+import { User, Project, SubProject, Card, ProjectColumn } from "../database/entities";
 import { ProjectsController } from "../projects/projects.controller";
 import { ProjectsService } from "../projects/projects.service";
 import { expireSec } from "../auth/auth.service";
@@ -12,7 +12,7 @@ import { AuthController } from "../auth/auth.controller";
 
 // Current test database contains one user with:
 // - username: firstUser
-// - password: password
+// - password: hiThere
 
 describe('ProjectsController', () => {
     let projectsController: ProjectsController;
@@ -23,8 +23,8 @@ describe('ProjectsController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [
-                TypeOrmTestingModule([User, Project]), 
-                TypeOrmModule.forFeature([User, Project]),
+                TypeOrmTestingModule([User, Project, SubProject, Card, ProjectColumn]), 
+                TypeOrmModule.forFeature([User, Project, SubProject, Card, ProjectColumn]),
             ],
             controllers: [ProjectsController, AuthController],
             providers: [ProjectsService, AuthService, JwtService],
@@ -43,7 +43,6 @@ describe('ProjectsController', () => {
 
     describe('create', () => {
         it('project already exists error', async () => {
-            console.log(user);
             const request = {title: 'firstProject', description: 'first description'} as ProjectProposal;
             const response = await projectsController.create(user,request);
             expect(response).toBeNull();
@@ -53,7 +52,6 @@ describe('ProjectsController', () => {
     describe('getProjects', () => {
         it('returns array of projects', async () => {
             const response = await projectsController.getProjects(user);
-            console.log(response);
             expect(response).toBeDefined();
             expect(response[0]).toHaveProperty("ROWID");
             expect(response[0]).toHaveProperty("description");

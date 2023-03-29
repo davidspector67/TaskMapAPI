@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { Project, User } from './database/entities';
+import { Project, SubProject, User, Card, ProjectColumn } from './database/entities';
 import { ProjectsModule } from './projects/projects.module';
+import { SubProjectsModule } from './subProjects/subProjects.module';
 
 
 @Module({
@@ -13,9 +14,9 @@ import { ProjectsModule } from './projects/projects.module';
     username: 'root',
     password: 'password',
     database: 'taskmap',
-    entities: [User, Project],
+    entities: [User, Project, SubProject, Card, ProjectColumn],
     synchronize: true,
-  }),
+  }), SubProjectsModule,
 ],
 })
 export class AppModule {}

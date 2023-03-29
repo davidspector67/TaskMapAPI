@@ -4,7 +4,7 @@ import { ProjectProposal, ProjectTitleRequest } from './dtos/project.model';
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { IsNotEmpty, validate } from 'class-validator';
 import { AuthUser, JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Project, User } from '..//database/entities';
+import { Project, SubProject, User } from '..//database/entities';
 
 @ApiTags('projects')
 @Controller('projects')
@@ -20,7 +20,7 @@ export class ProjectsController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @Get('getprojects')
+  @Get('getProjects')
   async getProjects(@AuthUser() user: User): Promise<Project[]> {
     return await this.projectService.getProjects(user);
   }
