@@ -21,6 +21,8 @@ make
 
 This will start up the backend and database. From here, HTTP requests can be made directly to the API via the command line, or via the Swagger UI representation. This UI can be accessed at the URL: 
 `http://localhost:9000/api#/` where `9000` is the port used in your .env file. If you use a different port, adjust the above URL accordingly. 
+###
+To run the test cases of this program, run the same code as above, except replace the `make` command with `make run_tests`.
 
 ## Acknowledgements
 This application was inspired by a NestJS API developed by [Brandon Shihabi](https://github.com/Bricktheworld) as part of a group project.
