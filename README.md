@@ -13,7 +13,7 @@ First, in order to run TaskMap, you will need to install [GNU Make](https://www.
 Next, run the following commands to get the application up and running. 
 ```
 git clone https://github.com/davidspector67/TaskMap
-cd TaskMap
+cd TaskMapAPI
 cp sample.env .env
 cd backend
 make
