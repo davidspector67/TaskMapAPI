@@ -15,7 +15,7 @@ Next, run the following commands to get the application up and running.
 git clone https://github.com/davidspector67/TaskMap
 cd TaskMapAPI
 cp sample.env .env
-cd backend
+cd Backend
 make
 ```
 
