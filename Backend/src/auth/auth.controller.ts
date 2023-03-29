@@ -34,12 +34,3 @@ export class AuthController {
     return this.authService.userAuth(user);
   }
 }
-
-  // @UseGuards(JwtAuthGuard)
-	// @ApiBearerAuth()
-	// @Post("refresh")
-	// async auth_refresh(@AuthUser() user: User): Promise<LoginResponse> {
-	// 	const jwt = await this.authService.login(user);
-  //   console.log()
-	// 	return { jwt, guid: user.guid, expireSec };
-	// }

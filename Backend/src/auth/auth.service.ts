@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 //TODO: put global variables, port numbers, etc into env.ts. Or maybe use module/namespace if that makes sense
-export const expireSec = 60000;
 
 @Injectable()
 export class AuthService {
@@ -31,7 +30,7 @@ export class AuthService {
 
   async userAuth(user: User): Promise<LoginResponse> {
     const jwt = await this.login(user);
-    return { jwt: jwt, guid: user.guid, expireSec: expireSec, }
+    return { jwt: jwt, guid: user.guid, expireSec: parseInt(process.env.JWT_EXPIRE_SEC), }
   }
 
   async validateUser(userInfo: LoginRequest): Promise<User> {

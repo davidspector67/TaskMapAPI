@@ -3,10 +3,12 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Card, Project, ProjectColumn, SubProject, User } from "../database/entities";
 import { AuthController } from "../auth/auth.controller";
-import { AuthService, expireSec } from "../auth/auth.service";
+import { AuthService } from "../auth/auth.service";
 import { LoginRequest } from "../auth/dtos/request.entities";
 import { JwtStrategy } from "../auth/jwt.strategy";
 import { TypeOrmTestingModule } from "./TypeOrmTestingModule";
+import { ConfigModule } from "@nestjs/config";
+import { AuthModule } from "../auth/auth.module";
 
 // Current test database contains one user with:
 // - username: firstUser
@@ -22,9 +24,14 @@ describe('AuthController', () => {
             imports: [
                 TypeOrmTestingModule([User, Project, SubProject, Card, ProjectColumn]), 
                 TypeOrmModule.forFeature([User, Project, SubProject, Card, ProjectColumn]),
+                AuthModule,
+                ConfigModule.forRoot({
+                    envFilePath: '../../.env',
+                    isGlobal: true,
+                }),
                 JwtModule.register({
-                    secret: 'proflow_jwt_key',
-                    signOptions: { expiresIn: expireSec },
+                    secret: process.env.JWT_SECRET,
+                    signOptions: { expiresIn: process.env.JWT_EXPIRE_SEC },
                   })
             ],
             controllers: [AuthController],
