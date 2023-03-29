@@ -1,7 +1,7 @@
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Project, User } from '../database/entities';
+import { Card, Project, ProjectColumn, SubProject, User } from '../database/entities';
 import { AuthController } from '../auth/auth.controller';
 import { AuthService, expireSec } from '../auth/auth.service';
 import { LoginRequest } from '../auth/dtos/request.entities';
@@ -18,8 +18,8 @@ describe('AuthService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
         imports: [
-            TypeOrmTestingModule([User, Project]), 
-            TypeOrmModule.forFeature([User, Project]),
+            TypeOrmTestingModule([User, Project, SubProject, Card, ProjectColumn]), 
+            TypeOrmModule.forFeature([User, Project, Card, SubProject, ProjectColumn]),
             JwtModule.register({
                 secret: 'proflow_jwt_key',
                 signOptions: { expiresIn: expireSec },
