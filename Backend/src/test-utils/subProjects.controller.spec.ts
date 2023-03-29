@@ -7,6 +7,7 @@ import { AuthService } from "../auth/auth.service";
 import { TypeOrmTestingModule } from "./TypeOrmTestingModule";
 import { AuthController } from "../auth/auth.controller";
 import { SubProjectsService } from "../subProjects/subProjects.service";
+import { ConfigModule } from "@nestjs/config";
 
 // Current test database contains one user with:
 // - username: firstUser
@@ -29,6 +30,14 @@ describe('SubProjectsController', () => {
             imports: [
                 TypeOrmTestingModule([User, Project, SubProject, Card, ProjectColumn]), 
                 TypeOrmModule.forFeature([User, Project, SubProject, Card, ProjectColumn]),
+                ConfigModule.forRoot({
+                  envFilePath: '../../.env',
+                  isGlobal: true,
+              }),
+                ConfigModule.forRoot({
+                  envFilePath: '../../.env',
+                  isGlobal: true,
+              }),
             ],
             controllers: [SubProjectsController, AuthController],
             providers: [SubProjectsService, AuthService, JwtService],

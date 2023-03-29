@@ -4,11 +4,11 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { User, Project, SubProject, Card, ProjectColumn } from "../database/entities";
 import { ProjectsController } from "../projects/projects.controller";
 import { ProjectsService } from "../projects/projects.service";
-import { expireSec } from "../auth/auth.service";
 import { ProjectProposal, ProjectTitleRequest } from "../projects/dtos/project.model";
 import { AuthService } from "../auth/auth.service";
 import { TypeOrmTestingModule } from "./TypeOrmTestingModule";
 import { AuthController } from "../auth/auth.controller";
+import { ConfigModule } from "@nestjs/config";
 
 // Current test database contains one user with:
 // - username: firstUser
@@ -25,6 +25,10 @@ describe('ProjectsController', () => {
             imports: [
                 TypeOrmTestingModule([User, Project, SubProject, Card, ProjectColumn]), 
                 TypeOrmModule.forFeature([User, Project, SubProject, Card, ProjectColumn]),
+                ConfigModule.forRoot({
+                    envFilePath: '../../.env',
+                    isGlobal: true,
+                }),
             ],
             controllers: [ProjectsController, AuthController],
             providers: [ProjectsService, AuthService, JwtService],
